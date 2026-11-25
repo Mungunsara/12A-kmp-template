@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-/* KMP-ийн DFA хүснэгтийг байгуулах */
 void kmp_build_dfa(const unsigned char *pattern, size_t m,
                    size_t *dfa, size_t *restart)
 {
@@ -34,7 +33,6 @@ void kmp_build_dfa(const unsigned char *pattern, size_t m,
     *restart = x;
 }
 
-/* DFA ашиглан бүх олдцыг хайх */
 int search_all(const unsigned char *text, size_t n,
                const unsigned char *pattern, size_t m,
                match_fn emit, void *context)
@@ -44,15 +42,13 @@ int search_all(const unsigned char *text, size_t n,
         return SEARCH_BAD_ARGUMENT;
     }
 
-    if (m > SIZE_MAX / KMP_ALPHABET) {
+    if (m > SIZE_MAX / KMP_ALPHABET)
         return SEARCH_BAD_ARGUMENT;
-    }
 
     size_t entries = KMP_ALPHABET * m;
 
-    if (entries > SIZE_MAX / sizeof(size_t)) {
+    if (entries > SIZE_MAX / sizeof(size_t))
         return SEARCH_BAD_ARGUMENT;
-    }
 
     if (n < m)
         return SEARCH_OK;
@@ -63,7 +59,6 @@ int search_all(const unsigned char *text, size_t n,
         return SEARCH_NO_MEMORY;
 
     size_t restart = 0;
-
     kmp_build_dfa(pattern, m, dfa, &restart);
 
     size_t state = 0;
@@ -86,6 +81,5 @@ int search_all(const unsigned char *text, size_t n,
     }
 
     free(dfa);
-
     return SEARCH_OK;
 }
