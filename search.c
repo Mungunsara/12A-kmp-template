@@ -1,16 +1,18 @@
 #include "search.h"
 #include <stdlib.h>
+#include <stdint.h>
 
-void kmp_build_dfa(const unsigned char *pattern, size_t m, size_t *dfa,
-                   size_t *restart)
+/* KMP-ийн DFA хүснэгтийг байгуулах */
+void kmp_build_dfa(const unsigned char *pattern, size_t m,
+                   size_t *dfa, size_t *restart)
 {
+    *restart = 0;
+
     for (size_t c = 0; c < KMP_ALPHABET; ++c) {
         for (size_t j = 0; j < m; ++j) {
             dfa[c * m + j] = 0;
         }
     }
-
-    *restart = 0;
 
     if (m == 0)
         return;
@@ -32,6 +34,7 @@ void kmp_build_dfa(const unsigned char *pattern, size_t m, size_t *dfa,
     *restart = x;
 }
 
+/* DFA ашиглан бүх олдцыг хайх */
 int search_all(const unsigned char *text, size_t n,
                const unsigned char *pattern, size_t m,
                match_fn emit, void *context)
